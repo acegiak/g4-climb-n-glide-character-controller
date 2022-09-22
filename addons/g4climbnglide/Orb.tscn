@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://bsk5h2di5522o"]
+
+[ext_resource type="Script" path="res://addons/g4climbnglide/Orb.gd" id="1_8mtt0"]
+[ext_resource type="Script" path="res://addons/g4climbnglide/Interactable.gd" id="2_asm5b"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ml2kl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3xys"]
+albedo_color = Color(0.8, 0.458824, 0.305882, 1)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3ifty"]
+radius = 2.0
+
+[node name="Orb" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.38881, 1.33217, 0)
+mesh = SubResource("SphereMesh_ml2kl")
+surface_material_override/0 = SubResource("StandardMaterial3D_e3xys")
+script = ExtResource("1_8mtt0")
+
+[node name="Area3d" type="Area3D" parent="."]
+script = ExtResource("2_asm5b")
+action_label = "Consume Orb"
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Area3d"]
+shape = SubResource("CylinderShape3D_3ifty")
+
+[connection signal="execute" from="Area3d" to="." method="consume"]
