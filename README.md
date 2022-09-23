@@ -1,6 +1,8 @@
 # g4 climb'n'glide character controller
 A character controller for Godot 4 with run, jump, climb, glide, optional stamina, and interactables.
 
+![image](https://github.com/acegiak/g4-climb-n-glide-character-controller/raw/main/screenshots/Recording%202022-09-23%20at%2006.43.38.gif)
+
 ## Installation
  * Clone or download the repo
  * put the addons/g4climbnglide folder in your project's addons folder
@@ -13,3 +15,4 @@ A character controller for Godot 4 with run, jump, climb, glide, optional stamin
     * "jump"
     * "action"
     * "dash"
+
