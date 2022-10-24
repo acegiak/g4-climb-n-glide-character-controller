@@ -14,8 +14,10 @@ class_name CharacterController
 @export var dash_speed:float = 3
 @export var dash_length:float = 0.25
 @export var air_dash:bool = true
+@export var attack_time:float = 0.9*0.5
 
-enum state{RUN,JUMP,FALL,GLIDE,CLIMB,HANG,IDLE,DASH}
+
+enum state{RUN,JUMP,FALL,GLIDE,CLIMB,HANG,IDLE,DASH,ATTACK}
 signal change_state(state)
 
 var camera:Node3D
@@ -35,7 +37,12 @@ var last_on_wall:float = 0
 var last_wall_normal:Vector3 = Vector3.FORWARD
 var last_on_floor:float = 0
 
+
 var climbing:bool = false
+
+
+var last_attacked:float = 10
+var next_attack:float = 0
 
 #grab the camera so we can use it for relative movement
 func _ready():
@@ -47,7 +54,37 @@ func _process(delta):
 	if current_state != previous_state:
 		emit_signal("change_state",current_state)
 		previous_state = current_state
-	
+		
+#	last_attacked += delta
+#	if Input.is_action_just_pressed("attack"):
+#		last_attacked = 0
+#	if next_attack <= 0:
+#
+#		var weapons = find_children("*","Weapon",true,false)
+#
+#		if last_attacked < attack_time:
+#			next_attack = attack_time
+#			move("back_weapon","hand_weapon")
+#			$AnimationTree.set("parameters/Attack/active",1.0)
+#			if weapons.size()>0:
+#				weapons[0].active = true
+#			$DamageHitbox.do_damage()
+#		else:
+#			$AnimationTree.set("parameters/Attack/active",0.0)
+#			move("hand_weapon","back_weapon")
+#			if weapons.size()>0:
+#				weapons[0].active = false
+#	next_attack -= delta
+
+func move(from,to):
+	var fnode = find_child(from,true,false)
+	var tnode = find_child(to,true,false)
+	if fnode.get_child_count() > 0:
+		var moved = fnode.get_child(0)
+		fnode.remove_child(moved)
+		tnode.add_child(moved)
+		return moved
+
 func _physics_process(delta):
 	#don't do anythng till the camera is ready or we'll crash
 	if camera == null:
@@ -125,7 +162,7 @@ func _physics_process(delta):
 		movement += camera_relative
 		
 	#dash input and set direction
-	if Input.is_action_just_pressed("dash") and dashtime <= 0  and (last_on_floor< air_run_time || air_dash):
+	if Input.is_action_just_pressed("dash") and dashtime <= 0  and (last_on_floor< air_run_time || air_dash) and ! state.DASH in locked:
 		dashtime = dash_length
 		rotation.y = (last_facing*Vector2(-1,1)).rotated(PI*1.5).angle()+camera.rotation.y
 		dashdir = Vector3(0,0,dash_speed*runspeed*control_direction.length()).rotated(Vector3.UP,rotation.y)
@@ -141,10 +178,9 @@ func _physics_process(delta):
 		fallspeed = 0;
 		glidable = false
 	else:
-		if Input.is_action_pressed("jump") and ! state.GLIDE in locked:
-			if glidable:
-				fallspeed = gravity*0.1
-				current_state = state.GLIDE
+		if Input.is_action_pressed("jump") and ! state.GLIDE in locked and glidable:
+			fallspeed = gravity*0.1
+			current_state = state.GLIDE
 		else:
 			glidable = true
 			fallspeed += gravity*delta
@@ -163,8 +199,8 @@ func _physics_process(delta):
 			current_state = state.RUN
 		else:
 			current_state = state.IDLE
-
-	#do the actual movement
+	
+		#do the actual movement
 	velocity = movement
 	move_and_slide()
 

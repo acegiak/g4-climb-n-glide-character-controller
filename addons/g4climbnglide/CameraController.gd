@@ -3,6 +3,8 @@ extends Node3D
 @export var follow_object:NodePath
 @export var follow_speed:float
 var follow:Node3D
+@export var invertX:bool = false
+@export var invertY:bool = false
 
 
 var mousev:Vector2
@@ -22,11 +24,11 @@ func _input(event):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 
-	rotate_y(mousev.x)
-	rotate_object_local(Vector3.LEFT,mousev.y)
+	rotate_y(mousev.x if invertX else mousev.x*-1)
+	rotate_object_local(Vector3.LEFT,(mousev.y if invertY else mousev.y*-1))
 	rotation.x = clamp(rotation.x, -15, 15)
 	if follow != null:
-		var goto = follow.position+Vector3(0,1.5,0)
+		var goto = follow.position+Vector3(0,1,0)
 		position = position + ((goto-position)*delta*follow_speed)
 	mousev = Vector2.ZERO
 	

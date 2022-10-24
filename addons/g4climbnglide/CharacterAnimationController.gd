@@ -1,37 +1,61 @@
 extends AnimationTree
 
 var last_state:CharacterController.state
+var destinationStates:Dictionary = {}
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	destinationStates["parameters/Air/blend_amount"]= 0.0
+	destinationStates["parameters/Climb/blend_amount"]= 0.0
+	destinationStates["parameters/Glide/blend_amount"]= 0.0
+	destinationStates["parameters/Speed/scale"]= 1.0
+	destinationStates["parameters/Run/blend_amount"]= 0.0
+	destinationStates["parameters/Dash/blend_amount"]= 0.0
+	destinationStates["parameters/JumpStart/active"]= 0.0
+ # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
-	
+	for stringname in destinationStates.keys():
+		if get(stringname) is bool:
+			set(stringname,destinationStates[stringname])
+			continue
+		var diff = destinationStates[stringname] - get(stringname) #destination 1, current 0.4, diff 0.6
+		var dir = 1
+		if diff > 0:
+			dir = 1
+		else:
+			dir = -1
+			
+		if diff != 0:
+			var result = clampf(get(stringname)+(delta*dir/0.1),0,1)
+			set(stringname,result)
+
 	
 func state_changed(new_state:CharacterController.state):
-	set("parameters/Air/blend_amount",0.0)
-	set("parameters/Climb/blend_amount",0.0)
-	set("parameters/Glide/blend_amount",0.0)
-	set("parameters/Speed/scale",1.0)
-	set("parameters/Run/blend_amount",0.0)
-	set("parameters/Dash/blend_amount",0.0)
+	destinationStates["parameters/Air/blend_amount"]= 0.0
+	destinationStates["parameters/Climb/blend_amount"]= 0.0
+	destinationStates["parameters/Glide/blend_amount"]= 0.0
+	destinationStates["parameters/Speed/scale"]= 1.0
+	destinationStates["parameters/Run/blend_amount"]= 0.0
+	destinationStates["parameters/Dash/blend_amount"]= 0.0
+	destinationStates["parameters/JumpStart/active"]= 0.0
 	if new_state == CharacterController.state.CLIMB:
-		set("parameters/Climb/blend_amount",1.0)
+		destinationStates["parameters/Climb/blend_amount"]= 1.0
 	if new_state == CharacterController.state.GLIDE:
-		set("parameters/Glide/blend_amount",1.0)
-		set("parameters/Air/blend_amount",1.0)
+		destinationStates["parameters/Glide/blend_amount"]= 1.0
+		destinationStates["parameters/Air/blend_amount"]= 1.0
 	if new_state == CharacterController.state.FALL:
-		set("parameters/Air/blend_amount",1.0)
+		destinationStates["parameters/Air/blend_amount"]= 1.0
 	if new_state == CharacterController.state.JUMP:
-		set("parameters/Air/blend_amount",1.0)
+		destinationStates["parameters/Air/blend_amount"]= 1.0
+		destinationStates["parameters/JumpStart/active"]= 1.0
 	if new_state == CharacterController.state.RUN:
-		set("parameters/Run/blend_amount",1.0)
+		destinationStates["parameters/Run/blend_amount"]= 1.0
 	if new_state == CharacterController.state.DASH:
-		set("parameters/Dash/blend_amount",1.0)
+		destinationStates["parameters/Dash/blend_amount"]= 1.0
 	if new_state == CharacterController.state.HANG:
-		set("parameters/Climb/blend_amount",1.0)
-		set("parameters/Speed/scale",0.0)
+		destinationStates["parameters/Climb/blend_amount"]= 1.0
+		destinationStates["parameters/Speed/scale"]= 0.0
 	last_state = new_state
