@@ -13,6 +13,5 @@ A character controller for Godot 4 with run, jump, climb, glide, and stamina.
     * "move_left"
     * "move_right"
     * "jump"
-    * "action"
     * "dash"
 
