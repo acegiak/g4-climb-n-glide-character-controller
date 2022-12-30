@@ -133,7 +133,7 @@ func _physics_process(delta):
 		else:
 			current_state = state.HANG
 		movement += last_wall_normal*-1*climb_hold_force
-		look_at(position+last_wall_normal,Vector3.UP)
+		look_at(global_position+(last_wall_normal*5),Vector3.UP)
 		var wallangle = (last_facing).rotated(PI*1.5).angle()
 		var camera_relative = Vector3(0,climbspeed*control_direction.length(),0).rotated(last_wall_normal*-1,wallangle)
 		movement += camera_relative
