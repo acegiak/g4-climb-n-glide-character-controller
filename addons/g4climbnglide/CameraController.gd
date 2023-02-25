@@ -1,10 +1,11 @@
 extends Node3D
+@onready var player_container = $".."
 
-@export var follow_object:NodePath
-@export var follow_speed:float
+@export var follow_object:NodePath = "../Player"
+@onready var follow_speed:float = player_container.follow_speed
+@onready var invertX:bool = player_container.invertX
+@onready var invertY:bool = player_container.invertY
 var follow:Node3D
-@export var invertX:bool = false
-@export var invertY:bool = false
 
 
 var mousev:Vector2
@@ -16,7 +17,7 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		mousev = Input.get_last_mouse_velocity()*0.00001
+		mousev = event.relative*0.001
 	if event is InputEventJoypadMotion:
 		mousev = Input.get_vector("camera_left","camera_right","camera_up","camera_down")*0.1
 
