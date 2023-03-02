@@ -1,20 +1,22 @@
 extends CharacterBody3D
 class_name CharacterController
-@export var jump_length:float = 0.5
-@export var jump_power:float = 2000;
-@export var wall_jump_power:float = 2000;
-@export var gravity:float = 500
-@export var runspeed:float = 5
-@export var climbspeed:float = 2
+@onready var player_container = $".."
+
+@onready var jump_length:float = player_container.jump_length
+@onready var jump_power:float = player_container.jump_power
+@onready var wall_jump_power:float = player_container.wall_jump_power
+@onready var gravity:float = player_container.gravity
+@onready var runspeed:float = player_container.runspeed
+@onready var climbspeed:float = player_container.climbspeed
 @export var camera_object:NodePath
-@export var climb_hold_force:float = 2
-@export var climb_hold_time:float = 0.25
-@export var air_run_time:float = 0.25
-@export var wall_jump_outness:float = 0.5
-@export var dash_speed:float = 3
-@export var dash_length:float = 0.25
-@export var air_dash:bool = true
-@export var attack_time:float = 0.9*0.5
+@onready var climb_hold_force:float = player_container.climb_hold_force
+@onready var climb_hold_time:float = player_container.climb_hold_time
+@onready var air_run_time:float = player_container.air_run_time
+@onready var wall_jump_outness:float = player_container.wall_jump_outness
+@onready var dash_speed:float = player_container.dash_speed
+@onready var dash_length:float = player_container.dash_length
+@onready var air_dash:bool = player_container.air_dash
+@onready var attack_time:float = player_container.attack_time
 
 
 enum state{RUN,JUMP,FALL,GLIDE,CLIMB,HANG,IDLE,DASH,ATTACK}

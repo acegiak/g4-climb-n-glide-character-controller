@@ -16,9 +16,9 @@ dest_files=["res://.godot/imported/vertbar.png-832624b6d24e3c6ecc4382f5ea6990fb.
 [params]
 
 compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false

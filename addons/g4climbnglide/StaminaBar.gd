@@ -1,11 +1,12 @@
 extends TextureProgressBar
+@onready var player_container = $"../.."
 
-@export var max_stamina:float = 100
-@export var current_stamina:float = 100
-@export var drain_rates:Dictionary
-@export var recovery_rate:float
-@export var recovery_wait_time:float
-@export var hide_wait_time:float
+@onready var max_stamina:float = player_container.max_stamina
+@onready var current_stamina:float = player_container.current_stamina
+@onready var drain_rates:Dictionary = player_container.drain_rates
+@onready var recovery_rate:float = player_container.recovery_rate
+@onready var recovery_wait_time:float = player_container.recovery_wait_time
+@onready var hide_wait_time:float = player_container.hide_wait_time
 
 signal lockout(Array)
 
